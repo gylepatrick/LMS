@@ -38,123 +38,58 @@ class Library extends CI_controller
         $this->load->view("templates/footer");
     }
 
-    // Insert new book
+
     public function store()
     {
-        $this->form_validation->set_rules(
-            "book_title",
-            "Book Title",
-            "required|trim"
-        );
-        $this->form_validation->set_rules("author", "Author", "required|trim");
-        $this->form_validation->set_rules(
-            "barcode",
-            "Barcode",
-            "required|trim|is_unique[lib.barcode]"
-        );
-        $this->form_validation->set_rules(
-            "isbn",
-            "ISBN",
-            "required|trim|is_unique[lib.isbn]"
-        );
-        $this->form_validation->set_rules(
-            "classification",
-            "Classification",
-            "required|trim"
-        );
-        $this->form_validation->set_rules(
-            "classification_number",
-            "Classification Number",
-            "required|trim"
-        );
-        $this->form_validation->set_rules(
-            "subject",
-            "Subject",
-            "required|trim"
-        );
-        $this->form_validation->set_rules(
-            "category_subject",
-            "Category Subject",
-            "required|trim"
-        );
-        $this->form_validation->set_rules(
-            "year_published",
-            "Year Published",
-            "required|trim|numeric"
-        );
-        $this->form_validation->set_rules(
-            "language",
-            "Language",
-            "required|trim"
-        );
-        $this->form_validation->set_rules(
-            "transaction_type",
-            "Transaction Type",
-            "required|trim"
-        );
-        $this->form_validation->set_rules(
-            "date_purchased",
-            "Date Purchased",
-            "required|trim"
-        );
-        $this->form_validation->set_rules(
-            "date_entered",
-            "Date Entered",
-            "required|trim"
-        );
-        $this->form_validation->set_rules("status", "Status", "required|trim");
-        $this->form_validation->set_rules(
-            "quantity",
-            "Quantity",
-            "required|trim"
-        );
-        $this->form_validation->set_rules(
-            "unit_cost",
-            "Unit Cost",
-            "required|trim"
-        );
-        $this->form_validation->set_rules(
-            "acq_cost",
-            "Acquisition Cost",
-            "required|trim"
-        );
+        $this->form_validation->set_rules("book_title", "Book Title", "required");
+        $this->form_validation->set_rules("author", "Author", "required");
+        $this->form_validation->set_rules("barcode", "Barcode", "required");
+        $this->form_validation->set_rules("isbn", "ISBN", "required|is_unique[lib.isbn]");
+        $this->form_validation->set_rules("classification", "Classification", "required");
+        $this->form_validation->set_rules("classification_number", "Classification Number", "required");
+        $this->form_validation->set_rules("subject", "Subject", "required");
+        $this->form_validation->set_rules("category_subject", "Category Subject", "required");
+        $this->form_validation->set_rules("year_published", "Year Published", "required|numeric");
+        $this->form_validation->set_rules("language", "Language", "required");
+        $this->form_validation->set_rules("transaction_type", "Transaction Type", "required");
+        $this->form_validation->set_rules("date_purchased", "Date Purchased", "required");
+        $this->form_validation->set_rules("date_entered", "Date Entered", "required");
+        $this->form_validation->set_rules("status", "Status", "required");
+        $this->form_validation->set_rules("quantity", "Quantity", "required");
+        $this->form_validation->set_rules("unit_cost", "Unit Cost", "required");
+        $this->form_validation->set_rules("acq_cost", "Acquisition Cost", "required");
 
         if ($this->form_validation->run() == false) {
-            $this->load->view("library/index");
-        } else {
-            $data = [
-                "book_title" => $this->input->post("book_title"),
-                "author" => $this->input->post("author"),
-                "barcode" => $this->input->post("barcode"),
-                "isbn" => $this->input->post("isbn"),
-                "classification" => $this->input->post("classification"),
-                "classification_number" => $this->input->post(
-                    "classification_number"
-                ),
-                "subject" => $this->input->post("subject"),
-                "category_subject" => $this->input->post("category_subject"),
-                "year_published" => $this->input->post("year_published"),
-                "language" => $this->input->post("language"),
-                "transaction_type" => $this->input->post("transaction_type"),
-                "date_purchased" => $this->input->post("date_purchased"),
-                "date_entered" => $this->input->post("date_entered"),
-                "quantity" => $this->input->post("quantity"),
-                "unit_cost" => $this->input->post("unit_cost"),
-                "acq_cost" => $this->input->post("acq_cost"),
-                "status" => $this->input->post("status"),
-            ];
-
-            if ($this->Library_model->insert_book($data)) {
-                $this->session->set_flashdata(
-                    "success",
-                    "Book added successfully."
-                );
-                redirect("library/index");
-            } else {
-                $this->session->set_flashdata("error", "Failed to add book.");
-                redirect("library/index");
-            }
+            $this->session->set_flashdata("error", validation_errors());
+            redirect("library/index");
         }
+
+        $data = [
+            "book_title" => $this->input->post("book_title"),
+            "author" => $this->input->post("author"),
+            "barcode" => $this->input->post("barcode"),
+            "isbn" => $this->input->post("isbn"),
+            "classification" => $this->input->post("classification"),
+            "classification_number" => $this->input->post("classification_number"),
+            "subject" => $this->input->post("subject"),
+            "category_subject" => $this->input->post("category_subject"),
+            "year_published" => $this->input->post("year_published"),
+            "language" => $this->input->post("language"),
+            "transaction_type" => $this->input->post("transaction_type"),
+            "date_purchased" => $this->input->post("date_purchased"),
+            "date_entered" => $this->input->post("date_entered"),
+            "quantity" => $this->input->post("quantity"),
+            "unit_cost" => $this->input->post("unit_cost"),
+            "acq_cost" => $this->input->post("acq_cost"),
+            "status" => $this->input->post("status"),
+        ];
+
+        if ($this->Library_model->insert_book($data)) {
+            $this->session->set_flashdata("success", "Book added successfully.");
+        } else {
+            $this->session->set_flashdata("error", "Failed to add book.");
+        }
+        redirect("library/index");
     }
 
     // update book by id
