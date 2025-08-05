@@ -44,7 +44,7 @@ class Library extends CI_controller
         $this->form_validation->set_rules("book_title", "Book Title", "required");
         $this->form_validation->set_rules("author", "Author", "required");
         $this->form_validation->set_rules("barcode", "Barcode", "required");
-        $this->form_validation->set_rules("isbn", "ISBN", "required|is_unique[lib.isbn]");
+        $this->form_validation->set_rules("isbn", "ISBN", "required");
         $this->form_validation->set_rules("classification", "Classification", "required");
         $this->form_validation->set_rules("classification_number", "Classification Number", "required");
         $this->form_validation->set_rules("subject", "Subject", "required");
