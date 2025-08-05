@@ -486,18 +486,22 @@ class Library extends CI_controller
         }
     }
     //library dashboard
+    // Library dashboard
     public function library_dashboard()
     {
-        $data[
-            "most_borrowed_books"
-        ] = $this->Library_model->getMostBorrowedBooks();
-        $data[
-            "borrowed_books_by_month"
-        ] = $this->Library_model->getBorrowedBooksByMonth();
+        $this->load->model('Library_model');
 
-        $this->load->view("templates/header");
-        $this->load->view("library_dashboard");
-        $this->load->view("templates/footer");
+        // Existing data
+        $data['most_borrowed_books'] = $this->Library_model->getMostBorrowedBooks();
+        $data['borrowed_books_by_month'] = $this->Library_model->getBorrowedBooksByMonth();
+
+        $data['book_subjects'] = $this->Library_model->getBookSubjectsWithCount();
+        $data['book_categories'] = $this->Library_model->getBookCategoriesWithCount();
+        $data['total_books'] = $this->Library_model->getTotalBooks();
+
+        $this->load->view('templates/header');
+        $this->load->view('library_dashboard', $data); // <-- Pass $data to view
+        $this->load->view('templates/footer');
     }
 
     // student dashboard

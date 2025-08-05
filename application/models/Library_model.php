@@ -343,4 +343,28 @@ class Library_model extends CI_Model
         $query = $this->db->get();
         return $query->result();
     }
+
+
+
+    public function getBookCategoriesWithCount()
+    {
+        $this->db->select('category_subject, COUNT(*) as count');
+        $this->db->group_by('category_subject');
+        $query = $this->db->get('lib');
+        return $query->result_array();
+    }
+
+    public function getBookSubjectsWithCount()
+    {
+        $this->db->select('subject, COUNT(*) as count');
+        $this->db->group_by('subject');
+        $query = $this->db->get('lib');
+        return $query->result_array();
+    }
+
+    public function getTotalBooks()
+    {
+        return $this->db->count_all('lib');
+    }
+
 }
